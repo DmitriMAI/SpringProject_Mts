@@ -9,11 +9,11 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
-public class AnimalsRepository implements AnimalRepository {
+public class AnimalsRepositoryImpl implements AnimalRepository {
     List<Animal> animals;
     CreateAnimalService animalService;
 
-    public AnimalsRepository(CreateAnimalService createAnimalService) {
+    public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
         this.animalService = createAnimalService;
     }
 

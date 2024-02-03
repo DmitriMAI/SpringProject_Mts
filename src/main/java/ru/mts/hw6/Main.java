@@ -4,14 +4,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.mts.hw6.animal.Animal;
 import ru.mts.hw6.config.SpringConfig;
-import ru.mts.hw6.repository.impl.AnimalsRepository;
+import ru.mts.hw6.repository.impl.AnimalsRepositoryImpl;
 import ru.mts.hw6.service.CreateAnimalService;
 import ru.mts.hw6.service.impl.CreateAnimalServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-        AnimalsRepository animalsRepository = context.getBean(AnimalsRepository.class);
+        AnimalsRepositoryImpl animalsRepository = context.getBean(AnimalsRepositoryImpl.class);
 
         System.out.println("***   Demonstration for prototype bean");
         CreateAnimalService animalService = context.getBean(CreateAnimalServiceImpl.class);
