@@ -24,6 +24,11 @@ public interface CreateAnimalService {
      * Проинициализировать поле
      */
     void initAnimal();
+    /**
+     * Метод для создания фабрики
+     * в default методе в интерфейса
+     */
+    AnimalFactory injectForInterface();
 
     /**
      * Дефолтный метод генерации
@@ -31,7 +36,7 @@ public interface CreateAnimalService {
      * циклом while
      */
     default Animal[] createUniqueAnimals() {
-        AnimalFactory animalFactory = new AnimalFactory();
+        AnimalFactory animalFactory = injectForInterface();
         Animal[] animals = new Animal[10];
         int i = 0;
 

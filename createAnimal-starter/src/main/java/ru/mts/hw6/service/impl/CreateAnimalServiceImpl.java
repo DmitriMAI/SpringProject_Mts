@@ -1,5 +1,6 @@
 package ru.mts.hw6.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.mts.hw6.animal.Animal;
 import ru.mts.hw6.factory.AnimalFactory;
 import ru.mts.hw6.service.CreateAnimalService;
@@ -8,9 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static ru.mts.hw6.factory.AnimalTypes.*;
 
+@Service
 public class CreateAnimalServiceImpl implements CreateAnimalService {
+    AnimalFactory animalFactory;
 
     private Animal animal;
+    public CreateAnimalServiceImpl(AnimalFactory animalFactory){
+        this.animalFactory = animalFactory;
+    }
 
     /**
      * Получить животное из поля Animal
@@ -28,6 +34,10 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     @Override
     public void initAnimal() {
         animal = createRandomAnimal();
+    }
+    @Override
+    public AnimalFactory injectForInterface(){
+        return animalFactory;
     }
 
 
@@ -65,8 +75,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     }
 
     private Animal createRandomAnimal() {
-        AnimalFactory animalFactory = new AnimalFactory();
-
         switch (ThreadLocalRandom.current().nextInt(1, 4)) {
             case 1:
                 return animalFactory.getAnimal(WOLF);
