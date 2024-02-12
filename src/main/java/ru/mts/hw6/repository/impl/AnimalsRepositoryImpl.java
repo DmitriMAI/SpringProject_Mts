@@ -1,5 +1,6 @@
 package ru.mts.hw6.repository.impl;
 
+import org.springframework.stereotype.Repository;
 import ru.mts.hw6.animal.Animal;
 import ru.mts.hw6.repository.AnimalRepository;
 import ru.mts.hw6.service.CreateAnimalService;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
+@Repository
 public class AnimalsRepositoryImpl implements AnimalRepository {
     List<Animal> animals;
     CreateAnimalService animalService;
