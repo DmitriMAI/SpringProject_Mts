@@ -12,8 +12,8 @@ import java.util.*;
 
 @Repository
 public class AnimalsRepositoryImpl implements AnimalRepository {
-    List<Animal> animals;
-    CreateAnimalService animalService;
+    private List<Animal> animals;
+    private final CreateAnimalService animalService;
 
     public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
         this.animalService = createAnimalService;

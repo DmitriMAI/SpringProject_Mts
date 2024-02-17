@@ -11,7 +11,7 @@ import static ru.mts.hw6.factory.AnimalTypes.*;
 
 @Service
 public class CreateAnimalServiceImpl implements CreateAnimalService {
-    AnimalFactory animalFactory;
+    private final AnimalFactory animalFactory;
 
     private Animal animal;
     public CreateAnimalServiceImpl(AnimalFactory animalFactory){
@@ -48,6 +48,9 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
      * @return Массив животных
      */
     public Animal[] createUniqueAnimals(int n) {
+        if (n < 0){
+            throw  new IllegalArgumentException("Wrong n for createUniqueAnimals");
+        }
         Animal[] animals = new Animal[n];
 
         for (int i = 0; i < n; i++) {
@@ -74,7 +77,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         return animals;
     }
 
-    private Animal createRandomAnimal() {
+    public Animal createRandomAnimal() {
         switch (ThreadLocalRandom.current().nextInt(1, 4)) {
             case 1:
                 return animalFactory.getAnimal(WOLF);

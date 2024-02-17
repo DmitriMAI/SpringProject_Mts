@@ -1,6 +1,5 @@
 package ru.mts.hw6.factory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mts.hw6.animal.Animal;
 import ru.mts.hw6.animal.impl.Cat;
@@ -17,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class AnimalFactory {
-    final AnimalNamesProvider animalNamesProvider;
+    private final AnimalNamesProvider animalNamesProvider;
 
     public AnimalFactory(AnimalNamesProvider animalNamesProvider) {
         this.animalNamesProvider = animalNamesProvider;
@@ -45,6 +44,8 @@ public class AnimalFactory {
                 return new Dog(animalNamesProvider.getDogName() + randomNumForName, randomCost, randomDate);
             case CAT:
                 return new Cat(animalNamesProvider.getCatName() + randomNumForName, randomCost, randomDate);
+            case UNDEFINED_ANIMAL:
+                throw new IllegalStateException("Can't create undefined animal in factory");
             default:
                 throw new IllegalArgumentException("Wrong animal type:" + type);
         }

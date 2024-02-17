@@ -8,13 +8,13 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 public class AnimalNamesProvider {
     @Value("${animal.cat.names}")
-    String[] catNames;
+    private String[] catNames;
     @Value("${animal.wolf.names}")
-    String[] wolfNames;
+    private String[] wolfNames;
     @Value("${animal.dog.names}")
-    String[] dogNames;
+    private String[] dogNames;
     @Value("${animal.shark.names}")
-    String[] sharkNames;
+    private String[] sharkNames;
 
     public String getDogName(){
         if (dogNames.length == 0){

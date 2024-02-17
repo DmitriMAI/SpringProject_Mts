@@ -4,5 +4,6 @@ public enum AnimalTypes {
     WOLF,
     SHARK,
     DOG,
-    CAT
+    CAT,
+    UNDEFINED_ANIMAL
 }
