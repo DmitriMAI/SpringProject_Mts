@@ -19,9 +19,4 @@ public class SpringConfig {
     public CreateAnimalService createAnimalService(AnimalFactory animalFactory) {
         return new CreateAnimalServiceImpl(animalFactory);
     }
-
-//    @Bean
-//    public AnimalsRepositoryImpl createAnimalRepository(CreateAnimalService createAnimalService) {
-//        return new AnimalsRepositoryImpl(createAnimalService);
-//    }
 }

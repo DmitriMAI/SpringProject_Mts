@@ -1,5 +1,6 @@
 package ru.mts.hw6.schedule;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import ru.mts.hw6.repository.impl.AnimalsRepositoryImpl;
 
 @Component
 @EnableScheduling
+@Profile("!test")
 public class ScheduleTimer {
     private final AnimalsRepositoryImpl animalsRepository;
 
