@@ -5,6 +5,9 @@ import ru.mts.hw6.animal.Animal;
 import ru.mts.hw6.factory.AnimalFactory;
 import ru.mts.hw6.service.CreateAnimalService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static ru.mts.hw6.factory.AnimalTypes.*;
@@ -14,7 +17,8 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     private final AnimalFactory animalFactory;
 
     private Animal animal;
-    public CreateAnimalServiceImpl(AnimalFactory animalFactory){
+
+    public CreateAnimalServiceImpl(AnimalFactory animalFactory) {
         this.animalFactory = animalFactory;
     }
 
@@ -35,8 +39,9 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     public void initAnimal() {
         animal = createRandomAnimal();
     }
+
     @Override
-    public AnimalFactory injectForInterface(){
+    public AnimalFactory injectForInterface() {
         return animalFactory;
     }
 
@@ -45,16 +50,18 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
      * Создает N уникальных животных
      *
      * @param n Сколько животных создать
-     * @return Массив животных
+     * @return Мап. Ключ - тип животного, значнеие массив из этого типа животных
      */
-    public Animal[] createUniqueAnimals(int n) {
-        if (n < 0){
-            throw  new IllegalArgumentException("Wrong n for createUniqueAnimals");
+    public Map<String, List<Animal>> createUniqueAnimals(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("Wrong n for createUniqueAnimals");
         }
-        Animal[] animals = new Animal[n];
+        Map<String, List<Animal>> animals = new HashMap<>();
+        Animal generatedAnimal;
 
         for (int i = 0; i < n; i++) {
-            animals[i] = createRandomAnimal();
+            generatedAnimal = createRandomAnimal();
+            addToListMap(animals, generatedAnimal.getBreed(), generatedAnimal);
         }
         return animals;
     }
@@ -62,21 +69,27 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     /**
      * Создает 10 различных животных циклом do while
      *
-     * @return Массив животных
+     * @return Мап. Ключ - тип животного, значнеие массив из этого типа животных
      */
     @Override
-    public Animal[] createUniqueAnimals() {
-        Animal[] animals = new Animal[10];
+    public Map<String, List<Animal>> createUniqueAnimals() {
+        Map<String, List<Animal>> animals = new HashMap<>();
+        Animal generatedAnimal;
         int i = 0;
 
-        System.out.println("Impl method with do while");
         do {
-            animals[i] = createRandomAnimal();
+            generatedAnimal = createRandomAnimal();
+            addToListMap(animals, generatedAnimal.getBreed(), generatedAnimal);
             i++;
         } while (i < 10);
         return animals;
     }
 
+    /**
+     * Создание одного животного
+     *
+     * @return Animal
+     */
     public Animal createRandomAnimal() {
         switch (ThreadLocalRandom.current().nextInt(1, 4)) {
             case 1:

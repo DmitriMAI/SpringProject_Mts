@@ -12,7 +12,7 @@ import java.util.*;
 
 @Repository
 public class AnimalsRepositoryImpl implements AnimalRepository {
-    private List<Animal> animals;
+    private Map<String, List<Animal>> animals;
     private final CreateAnimalService animalService;
 
     public AnimalsRepositoryImpl(CreateAnimalService createAnimalService) {
@@ -21,26 +21,32 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
 
     @PostConstruct
     private void postConstruct() {
-        animals = List.of(animalService.createUniqueAnimals());
+        animals = animalService.createUniqueAnimals();
     }
 
     /**
      * При помощи цикла находит всех животных,
      * которые родились в високосный год
      *
-     * @return Массив из имен животных
+     * @return Мапа. Ключ - тип + имя животного, значение - дата
      */
     @Override
-    public String[] findLeapYearNames() {
+    public Map<String, LocalDate> findLeapYearNames() {
         validateAnimals();
-        List<String> animalsReturn = new ArrayList<>();
+        Map<String, LocalDate> animalsReturn = new HashMap<>();
 
-        for (Animal animal : animals) {
-            if (animal.getBirthDate().isLeapYear()) {
-                animalsReturn.add(animal.getName());
+        Set<String> keysMap = animals.keySet();
+        for (String key : keysMap) {
+            List<Animal> animalsList = animals.get(key);
+            for (Animal animal : animalsList) {
+                if (animal.getBirthDate().isLeapYear()) {
+                    animalsReturn.put(
+                            animal.getBreed() + " " + animal.getName(),
+                            animal.getBirthDate());
+                }
             }
         }
-        return animalsReturn.toArray(new String[0]);
+        return animalsReturn;
     }
 
     /**
@@ -48,42 +54,67 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
      * животных, возраст которых больше N лет
      *
      * @param n Возраст, выше которого нужно найти
-     * @return Массив подходящих животных
+     * @return Мап. Ключ - животное, значение - возраст
      */
     @Override
-    public Animal[] findOlderAnimal(int n) {
+    public Map<Animal, Integer> findOlderAnimal(int n) {
         validateAnimals();
-        List<Animal> animalsReturn = new ArrayList<>();
+        Map<Animal, Integer> animalsReturn = new HashMap<>();
+        int oldestYearsOld = 0;
+        Animal oldestAnimal = null;
 
-        for (Animal animal : animals) {
-            if (Period.between(animal.getBirthDate(), LocalDate.now()).getYears() > n) {
-                animalsReturn.add(animal);
+        Set<String> keysMap = animals.keySet();
+        for (String key : keysMap) {
+            List<Animal> animalList = animals.get(key);
+            for (Animal animal : animalList) {
+                int animalYearsOld = Period.between(animal.getBirthDate(), LocalDate.now()).getYears();
+
+                if (animalYearsOld > oldestYearsOld) {
+                    oldestYearsOld = animalYearsOld;
+                    oldestAnimal = animal;
+                }
+                if (animalYearsOld > n) {
+                    animalsReturn.put(animal, animalYearsOld);
+                }
             }
         }
-        return animalsReturn.toArray(new Animal[0]);
+        if (animalsReturn.isEmpty()) {
+            animalsReturn.put(oldestAnimal, oldestYearsOld);
+        }
+        return animalsReturn;
     }
 
     /**
-     * Ищет в Map дубликаты животных
+     * Ищет дубликаты животных
+     *
+     * @return Мап. Ключ - тип животного, значение - количество дубликата
      */
     @Override
-    public Map<Animal, Integer> findDuplicate() {
+    public Map<String, Integer> findDuplicate() {
         validateAnimals();
         Map<Animal, Integer> animalDuplicates = new HashMap<>();
         Set<Animal> uniqueAnimals = new HashSet<>();
+        Map<String, Integer> animalsReturn = new HashMap<>();
 
-        for (Animal animal : animals) {
-            if (uniqueAnimals.contains(animal)) {
-                if (animalDuplicates.containsKey(animal)) {
-                    animalDuplicates.put(animal, animalDuplicates.get(animal) + 1);
+        Set<String> keysMap = animals.keySet();
+        for (String key : keysMap) {
+            List<Animal> animalsList = animals.get(key);
+            for (Animal animal : animalsList) {
+                if (uniqueAnimals.contains(animal)) {
+                    if (animalDuplicates.containsKey(animal)) {
+                        animalDuplicates.put(animal, animalDuplicates.get(animal) + 1);
+                    } else {
+                        animalDuplicates.put(animal, 1);
+                    }
                 } else {
-                    animalDuplicates.put(animal, 1);
+                    uniqueAnimals.add(animal);
                 }
-            } else {
-                uniqueAnimals.add(animal);
             }
         }
-        return animalDuplicates;
+        for (Map.Entry<Animal, Integer> entry : animalDuplicates.entrySet()) {
+            animalsReturn.put(entry.getKey().getBreed(), entry.getValue());
+        }
+        return animalsReturn;
     }
 
     /**
@@ -92,11 +123,11 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
      */
     @Override
     public void printDuplicate() {
-        Map<Animal, Integer> animalDuplicates = findDuplicate();
+        Map<String, Integer> animalDuplicates = findDuplicate();
         if (animalDuplicates.isEmpty()) {
             System.out.println("There is no duplicates");
         }
-        for (Map.Entry<Animal, Integer> entry : animalDuplicates.entrySet()) {
+        for (Map.Entry<String, Integer> entry : animalDuplicates.entrySet()) {
             System.out.println(entry);
         }
     }
@@ -105,9 +136,13 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
         if (animals == null) {
             throw new IllegalArgumentException("Animals array cannot be null");
         }
-        for (Animal animal : animals) {
-            if (animal == null) {
-                throw new IllegalArgumentException("Some animal is null");
+        Set<String> keysMap = animals.keySet();
+        for (String key : keysMap) {
+            List<Animal> animalsList = animals.get(key);
+            for (Animal animal : animalsList) {
+                if (animal == null) {
+                    throw new IllegalArgumentException("Some animal is null");
+                }
             }
         }
     }

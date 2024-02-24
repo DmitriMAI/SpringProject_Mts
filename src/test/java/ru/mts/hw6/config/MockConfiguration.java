@@ -10,6 +10,8 @@ import ru.mts.hw6.animal.impl.Shark;
 import ru.mts.hw6.service.impl.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @Profile("test")
 @TestConfiguration
@@ -18,9 +20,11 @@ public class MockConfiguration {
     @Primary
     public CreateAnimalServiceImpl createAnimalServiceMock() {
         CreateAnimalServiceImpl impl = Mockito.mock(CreateAnimalServiceImpl.class);
-        Animal[] animals = {
-                new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
-                new Shark("S", 0.1, LocalDate.of(2020, 1, 8))};
+        Map<String, List<Animal>> animals = Map.of(
+                "Fish", List.of(
+                        new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
+                        new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
+                        new Shark("S1", 0.1, LocalDate.of(2020, 1, 8))));
         Mockito.when(impl.createUniqueAnimals()).thenReturn(animals);
         return impl;
     }

@@ -13,6 +13,8 @@ import ru.mts.hw6.config.MockConfiguration;
 import ru.mts.hw6.service.impl.CreateAnimalServiceImpl;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -32,13 +34,13 @@ class AnimalServiceTest {
     @Test
     @DisplayName("Проверка создания массива животных при корректном N")
     void createAnimalsTest() {
-        Animal[] animals = {
-                new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
-                new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
-                new Shark("S", 0.1, LocalDate.of(2020, 1, 8))};
-        int animalCount = 3;
+        Map<String, List<Animal>> animals = Map.of(
+                "Fish", List.of(
+                        new Shark("S", 0.1, LocalDate.of(2020, 1, 8)),
+                        new Shark("S", 0.1, LocalDate.of(2020, 1, 8))));
+        int animalCount = 2;
 
-        Assertions.assertArrayEquals(animals, animalService.createUniqueAnimals(animalCount));
+        Assertions.assertEquals(animals, animalService.createUniqueAnimals(animalCount));
     }
 
     @Test

@@ -3,45 +3,49 @@ package ru.mts.hw6.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class AnimalNamesProvider {
     @Value("${animal.cat.names}")
-    private String[] catNames;
+    private List<String> catNames;
     @Value("${animal.wolf.names}")
-    private String[] wolfNames;
+    private List<String> wolfNames;
     @Value("${animal.dog.names}")
-    private String[] dogNames;
+    private List<String> dogNames;
     @Value("${animal.shark.names}")
-    private String[] sharkNames;
+    private List<String> sharkNames;
 
-    public String getDogName(){
-        if (dogNames.length == 0){
+    public String getDogName() {
+        if (dogNames.isEmpty()) {
             return "blancDogName";
         }
-        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, dogNames.length);
-        return dogNames[randomIndexForName];
+        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, dogNames.size());
+        return dogNames.get(randomIndexForName);
     }
-    public String getCatName(){
-        if (catNames.length == 0){
+
+    public String getCatName() {
+        if (catNames.isEmpty()) {
             return "blancCatName";
         }
-        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, catNames.length);
-        return catNames[randomIndexForName];
+        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, catNames.size());
+        return catNames.get(randomIndexForName);
     }
-    public String getWolfName(){
-        if (wolfNames.length == 0){
+
+    public String getWolfName() {
+        if (wolfNames.isEmpty()) {
             return "blancWolfName";
         }
-        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, wolfNames.length);
-        return wolfNames[randomIndexForName];
+        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, wolfNames.size());
+        return wolfNames.get(randomIndexForName);
     }
-    public String getSharkName(){
-        if (sharkNames.length == 0){
+
+    public String getSharkName() {
+        if (sharkNames.isEmpty()) {
             return "blancSharkName";
         }
-        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, sharkNames.length);
-        return sharkNames[randomIndexForName];
+        int randomIndexForName = ThreadLocalRandom.current().nextInt(1, sharkNames.size());
+        return sharkNames.get(randomIndexForName);
     }
 }

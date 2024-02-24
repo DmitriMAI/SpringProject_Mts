@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import ru.mts.hw6.animal.Animal;
-import ru.mts.hw6.animal.impl.Shark;
 import ru.mts.hw6.config.MockConfiguration;
 import ru.mts.hw6.repository.impl.AnimalsRepositoryImpl;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -27,32 +26,35 @@ class AnimalRepositoryTest {
     @Test
     @DisplayName("Тест метода findDuplicate")
     void findDuplicateTest() {
-        Map<Animal, Integer> expectedDuplicates = Map.ofEntries(
-                entry(new Shark("S", 0.1, LocalDate.of(2020, 1, 8)), 1)
+        Map<String, Integer> expectedDuplicates = Map.ofEntries(
+                entry("Fish", 1)
         );
-        Map<Animal, Integer> actualDuplicates = animalsRepository.findDuplicate();
+        Map<String, Integer> actualDuplicates = animalsRepository.findDuplicate();
         Assertions.assertEquals(expectedDuplicates, actualDuplicates);
     }
 
     @Test
     @DisplayName("Тест метода findDuplicate, но с пустой Map")
     void findDuplicateNotExpectedTest() {
-        Map<Animal, Integer> expectedDuplicates = Map.ofEntries();
-        Map<Animal, Integer> actualDuplicates = animalsRepository.findDuplicate();
+        Map<String, Integer> expectedDuplicates = Map.ofEntries();
+        Map<String, Integer> actualDuplicates = animalsRepository.findDuplicate();
         Assertions.assertNotEquals(expectedDuplicates, actualDuplicates);
     }
 
     @Test
     @DisplayName("Тест метода findLeapYearNames")
     void findLeapYearNamesTest() {
-        String[] expectedAnimalsNames = {"S", "S"};
-        Assertions.assertArrayEquals(expectedAnimalsNames, animalsRepository.findLeapYearNames());
+        Map<String, LocalDate> expectedAnimals = Map.ofEntries(
+                entry("Fish S", LocalDate.of(2020, 1, 8)),
+                entry("Fish S1", LocalDate.of(2020, 1, 8))
+        );
+        Assertions.assertEquals(expectedAnimals, animalsRepository.findLeapYearNames());
     }
 
     @Test
-    @DisplayName("Тест возврата одного дубликата вместо нескольких")
+    @DisplayName("Тест метода findLeapYearNames, но с пустой Map")
     void findLeapYearNamesNotExpectedTest() {
-        String[] expectedAnimalsNames = {"S"};
-        Assertions.assertNotEquals(expectedAnimalsNames, animalsRepository.findLeapYearNames());
+        Map<String, LocalDate> expectedAnimals = new HashMap<>();
+        Assertions.assertNotEquals(expectedAnimals, animalsRepository.findLeapYearNames());
     }
 }
