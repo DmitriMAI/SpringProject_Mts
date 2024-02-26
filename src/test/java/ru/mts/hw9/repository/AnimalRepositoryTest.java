@@ -27,7 +27,7 @@ class AnimalRepositoryTest {
     @DisplayName("Тест метода findDuplicate")
     void findDuplicateTest() {
         Map<String, Integer> expectedDuplicates = Map.ofEntries(
-                entry("Fish", 1)
+                entry("Fish", 2)
         );
         Map<String, Integer> actualDuplicates = animalsRepository.findDuplicate();
         Assertions.assertEquals(expectedDuplicates, actualDuplicates);

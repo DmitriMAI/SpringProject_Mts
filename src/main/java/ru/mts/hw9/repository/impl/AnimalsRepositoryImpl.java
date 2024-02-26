@@ -92,28 +92,27 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
     @Override
     public Map<String, Integer> findDuplicate() {
         validateAnimals();
-        Map<Animal, Integer> animalDuplicates = new HashMap<>();
-        Set<Animal> uniqueAnimals = new HashSet<>();
+        Map<String, Integer> animalDuplicatesBreed = new HashMap<>();
+        Set<String> uniqueAnimalsBreed = new HashSet<>();
         Map<String, Integer> animalsReturn = new HashMap<>();
 
         Set<String> keysMap = animals.keySet();
         for (String key : keysMap) {
             List<Animal> animalsList = animals.get(key);
             for (Animal animal : animalsList) {
-                if (uniqueAnimals.contains(animal)) {
-                    if (animalDuplicates.containsKey(animal)) {
-                        animalDuplicates.put(animal, animalDuplicates.get(animal) + 1);
+                String animalBreed = animal.getBreed();
+                if (uniqueAnimalsBreed.contains(animalBreed)) {
+                    if (animalDuplicatesBreed.containsKey(animalBreed)) {
+                        animalDuplicatesBreed.put(animalBreed, animalDuplicatesBreed.get(animalBreed) + 1);
                     } else {
-                        animalDuplicates.put(animal, 1);
+                        animalDuplicatesBreed.put(animalBreed, 1);
                     }
                 } else {
-                    uniqueAnimals.add(animal);
+                    uniqueAnimalsBreed.add(animalBreed);
                 }
             }
         }
-        for (Map.Entry<Animal, Integer> entry : animalDuplicates.entrySet()) {
-            animalsReturn.put(entry.getKey().getBreed(), entry.getValue());
-        }
+        animalsReturn.putAll(animalDuplicatesBreed);
         return animalsReturn;
     }
 
