@@ -27,9 +27,9 @@ public interface AnimalRepository {
     /**
      * Ищет дубликаты животных
      *
-     * @return Мап. Ключ - тип животного, значение - количество дубликата
+     * @return Мап. Ключ - тип животного, значение - Лист животных
      */
-    Map<String, Integer> findDuplicate();
+    Map<String, List<Animal>> findDuplicate();
 
     /**
      * Выводит на поток вывода

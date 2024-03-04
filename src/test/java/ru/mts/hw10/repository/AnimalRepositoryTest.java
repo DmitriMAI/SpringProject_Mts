@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import ru.mts.hw10.animal.Animal;
 import ru.mts.hw10.animal.impl.Cat;
+import ru.mts.hw10.animal.impl.Shark;
 import ru.mts.hw10.config.MockConfiguration;
 import ru.mts.hw10.repository.impl.AnimalsRepositoryImpl;
 
@@ -29,18 +30,18 @@ class AnimalRepositoryTest {
     @Test
     @DisplayName("Тест метода findDuplicate")
     void findDuplicateTest() {
-        Map<String, Integer> expectedDuplicates = Map.ofEntries(
-                entry("Fish", 1)
+        Map<String, List<Animal>> expectedDuplicates = Map.ofEntries(
+                entry("Fish", List.of(new Shark("S", 0.1, LocalDate.of(2020, 1, 8))))
         );
-        Map<String, Integer> actualDuplicates = animalsRepository.findDuplicate();
+        Map<String, List<Animal>> actualDuplicates = animalsRepository.findDuplicate();
         Assertions.assertEquals(expectedDuplicates, actualDuplicates);
     }
 
     @Test
     @DisplayName("Тест метода findDuplicate, но с пустой Map")
     void findDuplicateNotExpectedTest() {
-        Map<String, Integer> expectedDuplicates = Map.ofEntries();
-        Map<String, Integer> actualDuplicates = animalsRepository.findDuplicate();
+        Map<String, List<Animal>> expectedDuplicates = Map.ofEntries();
+        Map<String, List<Animal>> actualDuplicates = animalsRepository.findDuplicate();
         Assertions.assertNotEquals(expectedDuplicates, actualDuplicates);
     }
 

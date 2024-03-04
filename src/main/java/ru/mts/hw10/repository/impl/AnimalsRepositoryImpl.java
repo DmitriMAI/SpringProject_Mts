@@ -70,10 +70,10 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
     /**
      * Ищет дубликаты животных
      *
-     * @return Мап. Ключ - тип животного, значение - количество дубликата
+     * @return Мап. Ключ - тип животного, значение - Лист животных
      */
     @Override
-    public Map<String, Integer> findDuplicate() {
+    public Map<String, List<Animal>> findDuplicate() {
         validateAnimals();
         List<Animal> allAnimalsList = animals.values().stream().flatMap(List::stream).collect(Collectors.toList());
 
@@ -81,7 +81,8 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
                 .stream()
                 .flatMap(List::stream)
                 .filter(animal -> Collections.frequency(allAnimalsList, animal) > 1)
-                .collect(Collectors.groupingBy(Animal::getBreed, Collectors.collectingAndThen(Collectors.counting(), count -> count.intValue() - 1)));
+                .skip(1)
+                .collect(Collectors.groupingBy(Animal::getBreed));
     }
 
     /**
@@ -90,12 +91,12 @@ public class AnimalsRepositoryImpl implements AnimalRepository {
      */
     @Override
     public void printDuplicate() {
-        Map<String, Integer> animalDuplicates = findDuplicate();
+        Map<String, List<Animal>> animalDuplicates = findDuplicate();
         if (animalDuplicates.isEmpty()) {
             System.out.println("There is no duplicates");
         }
-        for (Map.Entry<String, Integer> entry : animalDuplicates.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
+        for (Map.Entry<String, List<Animal>> entry : animalDuplicates.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue().size());
         }
     }
 
